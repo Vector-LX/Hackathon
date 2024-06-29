@@ -128,3 +128,17 @@ def processtest(url):
 processtest("https://image.octoai.run/background-removal")
 
 
+# Load an image from file
+image = cv2.imread("result_image.png")
+
+# Check if the image was loaded successfully
+if image is None:
+    print("Error loading image")
+    exit()
+
+# Display the loaded image
+cv2.imshow("Image", image)
+
+cv2.waitKey(0)
+
+#cv2.destroyAllWindows()
