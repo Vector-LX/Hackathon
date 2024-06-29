@@ -97,7 +97,7 @@ def processtest(url):
     image_bytes = image_buffer.getvalue()
     encoded_image = base64.b64encode(image_bytes).decode('utf-8')
 
-    print("starting")
+
 
     payload = {
         "init_image": encoded_image,
@@ -109,13 +109,12 @@ def processtest(url):
         "X-OctoAI-Queue-Dispatch": "true"
     }
 
-    print("sending request 2")
     response = requests.post(url, headers=headers, json=payload)
-    print("sending request 3")
+
 
     if response.status_code != 200:
         print(response.text)
-    print(response.json())
+
 
     img_info = response.json()["image_b64"]
 
@@ -124,9 +123,11 @@ def processtest(url):
 
     if img.mode == 'RGBA':
      img = img.convert('RGB')
-    print("hi")
+
 
     img.save("result_image.png")
-    print("hi")
+
 
 processtest("https://image.octoai.run/background-removal")
+
+
