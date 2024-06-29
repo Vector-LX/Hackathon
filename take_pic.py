@@ -85,7 +85,7 @@ from typing import Optional, Tuple
 
 
 def processtest(url):
-    image = PIL.Image.open("picture.jpeg")
+    image = PIL.Image.open("picture.jpg")
 
     # Create a BytesIO buffer to hold the image data
     image_buffer = io.BytesIO()
