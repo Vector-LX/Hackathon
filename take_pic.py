@@ -142,3 +142,45 @@ cv2.imshow("Image", image)
 cv2.waitKey(0)
 
 #cv2.destroyAllWindows()
+
+
+
+#D-iD
+#cnNhZnJvbm9mZkBnbWFpbC5jb20:tX-8wLUI65UVqgQCV7xN9
+
+
+
+import requests
+from D_ID import Clips
+
+d_id = Clips("cnNhZnJvbm9mZkBnbWFpbC5jb20:tX-8wLUI65UVqgQCV7xN9")
+
+
+# payload = {
+#     "source_url": "result_image.png",
+#     "script": {
+#         "type": "text",
+#         "input": "Hello world!"
+#     }
+# }
+
+# headers = {
+#         "accept": "application/json",
+#         "Authorization": "Basic cnNhZnJvbm9mZkBnbWFpbC5jb20:tX-8wLUI65UVqgQCV7xN9",
+#         "Content-Type": "application/json",
+#     }
+
+
+text = "Hello World!"
+result = d_id.create_text_to_video_clip(text)
+print("result", result)
+#response = requests.post("https://api.d-id.com/talks", headers=headers,json=payload)
+#print(response)
+
+
+# if response.status_code == 200:
+#     print("Request successful!")
+#     data = response.json()
+#     print(data)
+# else:
+#     print("Request failed with status code:", response.status_code)
