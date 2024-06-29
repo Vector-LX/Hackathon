@@ -72,7 +72,11 @@ encoded_string = base64.b64encode(image_bytes).decode()
 
 print("starting")
 load_dotenv()
-OCTOAI_API_TOKEN = os.environ["OCTOAI_API_TOKEN"]
+OCTOAI_API_TOKEN = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjNkMjMzOTQ5In0.eyJzdWIiOiJjMWE5ZTYyOS04ZGQ3LTRiMjAtODRkNi03M2I0MmU5M2RlYWYiLCJ0eXBlIjoidXNlckFjY2Vzc1Rva2VuIiwidGVuYW50SWQiOiI1OTRlZGYxYS1lZDc5LTRhZWEtOWZlYi02OWI5ZmRmNGFiYWUiLCJ1c2VySWQiOiJkYmQ1ODY5My1kY2ZiLTRlMzctYjhiMi01Y2EyMDhlNTQxOTUiLCJhcHBsaWNhdGlvbklkIjoiYTkyNmZlYmQtMjFlYS00ODdiLTg1ZjUtMzQ5NDA5N2VjODMzIiwicm9sZXMiOlsiRkVUQ0gtUk9MRVMtQlktQVBJIl0sInBlcm1pc3Npb25zIjpbIkZFVENILVBFUk1JU1NJT05TLUJZLUFQSSJdLCJhdWQiOiIzZDIzMzk0OS1hMmZiLTRhYjAtYjdlYy00NmY2MjU1YzUxMGUiLCJpc3MiOiJodHRwczovL2lkZW50aXR5Lm9jdG8uYWkiLCJpYXQiOjE3MTk2OTQ1MDN9.bICfd8Rf26ZMV0Ov9b3HUx205kGDAZEHJNRrdFgMsk8xcLRSlNJjq-nwCIyKZlKVGzTjg2ZyGQFRORbFrRdHJLwM0FikaTB1xloeUQBXPn3EtYpiJM7qG0LMCcmmsu4YgbHQL36LreQgKgQr10H16USdXBxPApHawL0f2Q2oq98RcrUlD3mcfpZHQ6gkmEqU28cPVJqWiF5cPeaFxSt_qFRMtrsYLFeMdNSV0Edro2CB5XGF9qJYKi-rHUbjy79SpZbfKxJOu20iJFmEoRcjO5FFDqowJ44yleI68ghLbtqhGWX2UcEQSsapdiQ7hxShkNMMQNgckAckEiqEzWRMWg"
+
+
+print(OCTOAI_API_TOKEN)
+
 
 import requests
 import json
@@ -94,20 +98,20 @@ def processtest(url):
     encoded_image = base64.b64encode(image_bytes).decode('utf-8')
 
     print("starting")
-    OCTOAI_TOKEN = os.environ.get("OCTOAI_TOKEN")
 
     payload = {
         "init_image": encoded_image,
         "bgcolor":(255, 255, 255, 0)
     }
     headers = {
-        "Authorization": f"Bearer {OCTOAI_TOKEN}",
+        "Authorization": f"Bearer {OCTOAI_API_TOKEN}",
         "Content-Type": "application/json",
         "X-OctoAI-Queue-Dispatch": "true"
     }
 
-    print("sending request")
+    print("sending request 2")
     response = requests.post(url, headers=headers, json=payload)
+    print("sending request 3")
 
     if response.status_code != 200:
         print(response.text)
@@ -120,7 +124,9 @@ def processtest(url):
 
     if img.mode == 'RGBA':
      img = img.convert('RGB')
+    print("hi")
 
     img.save("result_image.png")
+    print("hi")
 
 processtest("https://image.octoai.run/background-removal")
