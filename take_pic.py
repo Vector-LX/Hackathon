@@ -18,7 +18,7 @@ if not ret:
 
 # Display the frame
 cv2.imshow("Webcam", frame)
-print("starting")
+
 
 # Wait for the 'c' key to be pressed
 while True:
@@ -30,7 +30,7 @@ while True:
 # Release the webcam and close the window
 cap.release()
 cv2.destroyAllWindows()
-print("starting")
+
 
 import cv2
 
@@ -44,9 +44,9 @@ if image is None:
 
 # Display the loaded image
 cv2.imshow("Image", image)
-print("starting")
+
 cv2.waitKey(0)
-print("starting")
+
 #cv2.destroyAllWindows()
 
 
@@ -73,9 +73,6 @@ encoded_string = base64.b64encode(image_bytes).decode()
 print("starting")
 load_dotenv()
 OCTOAI_API_TOKEN = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjNkMjMzOTQ5In0.eyJzdWIiOiJjMWE5ZTYyOS04ZGQ3LTRiMjAtODRkNi03M2I0MmU5M2RlYWYiLCJ0eXBlIjoidXNlckFjY2Vzc1Rva2VuIiwidGVuYW50SWQiOiI1OTRlZGYxYS1lZDc5LTRhZWEtOWZlYi02OWI5ZmRmNGFiYWUiLCJ1c2VySWQiOiJkYmQ1ODY5My1kY2ZiLTRlMzctYjhiMi01Y2EyMDhlNTQxOTUiLCJhcHBsaWNhdGlvbklkIjoiYTkyNmZlYmQtMjFlYS00ODdiLTg1ZjUtMzQ5NDA5N2VjODMzIiwicm9sZXMiOlsiRkVUQ0gtUk9MRVMtQlktQVBJIl0sInBlcm1pc3Npb25zIjpbIkZFVENILVBFUk1JU1NJT05TLUJZLUFQSSJdLCJhdWQiOiIzZDIzMzk0OS1hMmZiLTRhYjAtYjdlYy00NmY2MjU1YzUxMGUiLCJpc3MiOiJodHRwczovL2lkZW50aXR5Lm9jdG8uYWkiLCJpYXQiOjE3MTk2OTQ1MDN9.bICfd8Rf26ZMV0Ov9b3HUx205kGDAZEHJNRrdFgMsk8xcLRSlNJjq-nwCIyKZlKVGzTjg2ZyGQFRORbFrRdHJLwM0FikaTB1xloeUQBXPn3EtYpiJM7qG0LMCcmmsu4YgbHQL36LreQgKgQr10H16USdXBxPApHawL0f2Q2oq98RcrUlD3mcfpZHQ6gkmEqU28cPVJqWiF5cPeaFxSt_qFRMtrsYLFeMdNSV0Edro2CB5XGF9qJYKi-rHUbjy79SpZbfKxJOu20iJFmEoRcjO5FFDqowJ44yleI68ghLbtqhGWX2UcEQSsapdiQ7hxShkNMMQNgckAckEiqEzWRMWg"
-
-
-print(OCTOAI_API_TOKEN)
 
 
 import requests
