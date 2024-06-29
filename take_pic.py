@@ -1,186 +1,66 @@
 import cv2
-
-# Open the default webcam
-cap = cv2.VideoCapture(0)
-
-# Check if the webcam is opened correctly
-if not cap.isOpened():
-    print("Error opening webcam")
-    exit()
-
-# Read the first frame
-ret, frame = cap.read()
-
-# Check if the frame was read correctly
-if not ret:
-    print("Error reading frame")
-    exit()
-
-# Display the frame
-cv2.imshow("Webcam", frame)
-
-
-# Wait for the 'c' key to be pressed
-while True:
-    if cv2.waitKey(1) == ord('c'):
-        # Save the picture
-        cv2.imwrite("picture.jpg", frame)
-        break
-
-# Release the webcam and close the window
-cap.release()
-cv2.destroyAllWindows()
-
-
-import cv2
-
-# Load an image from file
-image = cv2.imread("picture.jpg")
-
-# Check if the image was loaded successfully
-if image is None:
-    print("Error loading image")
-    exit()
-
-# Display the loaded image
-cv2.imshow("Image", image)
-
-cv2.waitKey(0)
-
-#cv2.destroyAllWindows()
-
-
-
-# send to octoai for background subtraction
-from dotenv import load_dotenv
 import os
 import base64
-
-# Encode the image to JPEG format
-success, encoded_image = cv2.imencode('.jpg', image)
-
-# Check if the encoding was successful
-if not success:
-    print("Error encoding image")
-    exit()
-
-# Convert the encoded image to a bytes object
-image_bytes = encoded_image.tobytes()
-
-# Encode the bytes object to a base64 string
-encoded_string = base64.b64encode(image_bytes).decode()
-
-print("starting")
-load_dotenv()
-OCTOAI_API_TOKEN = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjNkMjMzOTQ5In0.eyJzdWIiOiJjMWE5ZTYyOS04ZGQ3LTRiMjAtODRkNi03M2I0MmU5M2RlYWYiLCJ0eXBlIjoidXNlckFjY2Vzc1Rva2VuIiwidGVuYW50SWQiOiI1OTRlZGYxYS1lZDc5LTRhZWEtOWZlYi02OWI5ZmRmNGFiYWUiLCJ1c2VySWQiOiJkYmQ1ODY5My1kY2ZiLTRlMzctYjhiMi01Y2EyMDhlNTQxOTUiLCJhcHBsaWNhdGlvbklkIjoiYTkyNmZlYmQtMjFlYS00ODdiLTg1ZjUtMzQ5NDA5N2VjODMzIiwicm9sZXMiOlsiRkVUQ0gtUk9MRVMtQlktQVBJIl0sInBlcm1pc3Npb25zIjpbIkZFVENILVBFUk1JU1NJT05TLUJZLUFQSSJdLCJhdWQiOiIzZDIzMzk0OS1hMmZiLTRhYjAtYjdlYy00NmY2MjU1YzUxMGUiLCJpc3MiOiJodHRwczovL2lkZW50aXR5Lm9jdG8uYWkiLCJpYXQiOjE3MTk2OTQ1MDN9.bICfd8Rf26ZMV0Ov9b3HUx205kGDAZEHJNRrdFgMsk8xcLRSlNJjq-nwCIyKZlKVGzTjg2ZyGQFRORbFrRdHJLwM0FikaTB1xloeUQBXPn3EtYpiJM7qG0LMCcmmsu4YgbHQL36LreQgKgQr10H16USdXBxPApHawL0f2Q2oq98RcrUlD3mcfpZHQ6gkmEqU28cPVJqWiF5cPeaFxSt_qFRMtrsYLFeMdNSV0Edro2CB5XGF9qJYKi-rHUbjy79SpZbfKxJOu20iJFmEoRcjO5FFDqowJ44yleI68ghLbtqhGWX2UcEQSsapdiQ7hxShkNMMQNgckAckEiqEzWRMWg"
-
-
 import requests
-import json
-import os
-import base64
-import time
-import io
+from dotenv import load_dotenv
 import PIL.Image
-from typing import Optional, Tuple
+import io
 
+# Capture and save a picture from the webcam
+def capture_picture():
+    cap = cv2.VideoCapture(0)
+    if not cap.isOpened():
+        raise Exception("Error opening webcam")
+    ret, frame = cap.read()
+    if not ret:
+        raise Exception("Error reading frame")
+    cv2.imshow("Webcam", frame)
+    while True:
+        if cv2.waitKey(1) == ord('c'):
+            cv2.imwrite("picture.jpg", frame)
+            break
+    cap.release()
+    cv2.destroyAllWindows()
 
-def processtest(url):
-    image = PIL.Image.open("picture.jpg")
+# Load and display an image
+def load_and_display_image(image_path):
+    image = cv2.imread(image_path)
+    if image is None:
+        raise Exception("Error loading image")
+    cv2.imshow("Image", image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
-    # Create a BytesIO buffer to hold the image data
+# Send image to OctoAI for background subtraction
+def send_to_octoai(image_path, api_url):
+    load_dotenv()
+    OCTOAI_API_TOKEN = os.getenv('OCTOAI_API_TOKEN')
+    image = PIL.Image.open(image_path)
     image_buffer = io.BytesIO()
     image.save(image_buffer, format='JPEG')
     image_bytes = image_buffer.getvalue()
     encoded_image = base64.b64encode(image_bytes).decode('utf-8')
-
-
-
     payload = {
         "init_image": encoded_image,
-        "bgcolor":(255, 255, 255, 0)
+        "bgcolor": (255, 255, 255, 0)
     }
     headers = {
         "Authorization": f"Bearer {OCTOAI_API_TOKEN}",
         "Content-Type": "application/json",
         "X-OctoAI-Queue-Dispatch": "true"
     }
-
-    response = requests.post(url, headers=headers, json=payload)
-
-
+    response = requests.post(api_url, headers=headers, json=payload)
     if response.status_code != 200:
-        print(response.text)
-
-
+        raise Exception(response.text)
     img_info = response.json()["image_b64"]
-
     img_bytes = base64.b64decode(img_info)
     img = PIL.Image.open(io.BytesIO(img_bytes))
-
     if img.mode == 'RGBA':
-     img = img.convert('RGB')
-
-
+        img = img.convert('RGB')
     img.save("result_image.png")
 
-
-processtest("https://image.octoai.run/background-removal")
-
-
-# Load an image from file
-image = cv2.imread("result_image.png")
-
-# Check if the image was loaded successfully
-if image is None:
-    print("Error loading image")
-    exit()
-
-# Display the loaded image
-cv2.imshow("Image", image)
-
-cv2.waitKey(0)
-
-#cv2.destroyAllWindows()
-
-
-
-#D-iD
-#cnNhZnJvbm9mZkBnbWFpbC5jb20:tX-8wLUI65UVqgQCV7xN9
-
-
-
-import requests
-from D_ID import Clips
-
-d_id = Clips("cnNhZnJvbm9mZkBnbWFpbC5jb20:tX-8wLUI65UVqgQCV7xN9")
-
-
-# payload = {
-#     "source_url": "result_image.png",
-#     "script": {
-#         "type": "text",
-#         "input": "Hello world!"
-#     }
-# }
-
-# headers = {
-#         "accept": "application/json",
-#         "Authorization": "Basic cnNhZnJvbm9mZkBnbWFpbC5jb20:tX-8wLUI65UVqgQCV7xN9",
-#         "Content-Type": "application/json",
-#     }
-
-
-text = "Hello World!"
-result = d_id.create_text_to_video_clip(text)
-print("result", result)
-#response = requests.post("https://api.d-id.com/talks", headers=headers,json=payload)
-#print(response)
-
-
-# if response.status_code == 200:
-#     print("Request successful!")
-#     data = response.json()
-#     print(data)
-# else:
-#     print("Request failed with status code:", response.status_code)
+# Main execution
+if __name__ == "__main__":
+    capture_picture()
+    send_to_octoai("picture.jpg", "https://image.octoai.run/background-removal")
+    load_and_display_image("result_image.png")
