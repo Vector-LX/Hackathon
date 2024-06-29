@@ -56,7 +56,7 @@ from dotenv import load_dotenv
 import os
 import base64
 
-encoded_string = base64.b64encode(image.read()) 
+encoded_string = base64.b64encode(cv2.imencode('.jpg', image)).decode()
 
 print("starting")
 load_dotenv()
