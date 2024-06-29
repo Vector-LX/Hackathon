@@ -56,7 +56,19 @@ from dotenv import load_dotenv
 import os
 import base64
 
-encoded_string = base64.b64encode(cv2.imencode('.jpg', image)).decode()
+# Encode the image to JPEG format
+success, encoded_image = cv2.imencode('.jpg', image)
+
+# Check if the encoding was successful
+if not success:
+    print("Error encoding image")
+    exit()
+
+# Convert the encoded image to a bytes object
+image_bytes = encoded_image.tobytes()
+
+# Encode the bytes object to a base64 string
+encoded_string = base64.b64encode(image_bytes).decode()
 
 print("starting")
 load_dotenv()
